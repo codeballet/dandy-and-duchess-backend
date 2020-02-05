@@ -21,6 +21,8 @@ export async function createTopic(
     userId: userId,
     topicId: topicId,
     createdAt: new Date().toISOString(),
-    description: createTopicRequest.description
+    description: createTopicRequest.description,
+    dueDate: createTopicRequest.dueDate,
+    done: false
   })
 }
