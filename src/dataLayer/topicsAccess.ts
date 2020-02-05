@@ -5,6 +5,7 @@ import { UpdateTopicRequest } from '../requests/UpdateTopicRequest'
 import { createLogger } from '../utils/logger'
 
 const logger = createLogger('topicsAccess')
+const bucketName = process.env.IMAGES_S3_BUCKET
 
 export class TopicsAccess {
   constructor(
@@ -61,7 +62,7 @@ export class TopicsAccess {
     updatedTopic: UpdateTopicRequest,
     userId: string
   ): Promise<any> {
-    logger.info(`dataLayer upodateTopic is updating topicId ${topicId}`)
+    logger.info(`dataLayer upodteTopic is updating topicId ${topicId}`)
 
     const params = {
       TableName: this.topicsTable,
@@ -74,6 +75,28 @@ export class TopicsAccess {
         ':uId':userId
       },
       ReturnValues: "ALL_NEW"
+    }
+
+    return await this.docClient.update(params).promise()
+  }
+
+  async updateUrl(
+    topicId: string, userId: string
+  ): Promise<any> {
+    logger.info(`Updating attachmentUrl for topic ${topicId}`)
+
+    const imageUrl = `https://${bucketName}.s3.amazonaws.com/${topicId}`
+
+    const params = {
+      TableName: this.topicsTable,
+      Key: { topicId },
+      UpdateExpression: 'set attachmentUrl = :a',
+      ConditionExpression: 'userId = :uId',
+      ExpressionAttributeValues: {
+        ':a':imageUrl,
+        ':uId':userId
+      },
+      ReturnValues: "UPDATED_NEW"
     }
 
     return await this.docClient.update(params).promise()

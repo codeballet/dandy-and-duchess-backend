@@ -7,7 +7,9 @@ import { getUserId } from '../utils'
 
 const logger = createLogger('getTopic')
 
-export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const handler: APIGatewayProxyHandler = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
   // Get all topics for a current user
 
   const userId = getUserId(event)

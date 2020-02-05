@@ -3,11 +3,11 @@ import { TopicsAccess } from '../dataLayer/topicsAccess'
 import { Topic } from '../models/Topic'
 import { CreateTopicRequest } from '../requests/CreateTopicRequest'
 import { UpdateTopicRequest } from '../requests/UpdateTopicRequest'
-// import { CreateTopicRequest } from '../requests/CreateTopicRequest'
 
 const topicsAccess = new TopicsAccess()
 
 export async function getAllTopics(userId: string): Promise<Topic[]> {
+
   return topicsAccess.getAllTopics(userId)
 }
 
@@ -32,6 +32,7 @@ export async function deleteTopic(
   topicId: string, 
   userId: string
 ): Promise<Topic> {
+
   return await topicsAccess.deleteTopic(topicId, userId)
 }
 
@@ -40,5 +41,13 @@ export async function updateTopic(
   updatedTopic: UpdateTopicRequest,
   userId: string
 ): Promise<any> {
+
   return await topicsAccess.updateTopic(topicId, updatedTopic, userId)
+}
+
+export async function uploadFile(
+  topicId: string, userId: string
+): Promise<string> {
+
+  return await topicsAccess.updateUrl(topicId, userId)
 }

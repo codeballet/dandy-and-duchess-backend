@@ -7,7 +7,9 @@ import { getUserId } from '../utils'
 
 const logger = createLogger('createTopic')
 
-export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const handler: APIGatewayProxyHandler = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
   logger.info(`createTopic is processing event`)
 
   // Create a new topic

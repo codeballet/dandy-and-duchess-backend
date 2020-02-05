@@ -7,7 +7,9 @@ import { createLogger } from '../../utils/logger'
 
 const logger = createLogger('deleteTopic')
 
-export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const handler: APIGatewayProxyHandler = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
   logger.info(`deleteTopic is processing event`)
 
   // Remove a topic by id
