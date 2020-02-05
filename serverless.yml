@@ -11,6 +11,7 @@ custom:
 
 plugins:
   - serverless-webpack
+  - serverless-iam-roles-per-function
 
 provider:
   name: aws
@@ -36,6 +37,15 @@ functions:
           path: topics
           cors: true
           authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TOPICS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TOPICS_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
 
   CreateTopic:
     handler: src/lambda/http/createTopic.handler
@@ -45,6 +55,51 @@ functions:
           path: topics
           cors: true
           authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TOPICS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TOPICS_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
+
+  DeleteTopic:
+    handler: src/lambda/http/deleteTopic.handler
+    events:
+      - http:
+          method: delete
+          path: topics/{topicId}
+          cors: true
+          authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TOPICS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TOPICS_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
+
+  UpdateTopic:
+    handler: src/lambda/http/updateTopic.handler
+    events:
+      - http:
+          method: patch
+          path: topics/{topicId}
+          cors: true
+          authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TOPICS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TOPICS_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
 
 resources:
   Resources:
