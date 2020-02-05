@@ -25,7 +25,7 @@ provider:
     TOPICS_TABLE: Topics-${self:provider.stage}
     USER_ID_INDEX: UserIdIndex
     IMAGES_S3_BUCKET: serverless-dandy-and-duchess-images-${self:provider.stage}
-    SINGED_URL_EXPIRATION: 300
+    SIGNED_URL_EXPIRATION: 300
 
 functions:
   Auth:
