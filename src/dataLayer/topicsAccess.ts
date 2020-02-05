@@ -27,6 +27,8 @@ export class TopicsAccess {
     }).promise()
 
     const items = result.Items
+    logger.info(`Items returned from DB: ${items}`)
+    
     return items as Topic[]
   }
 
@@ -67,11 +69,12 @@ export class TopicsAccess {
     const params = {
       TableName: this.topicsTable,
       Key: { topicId },
-      UpdateExpression: 'set description = :d, dueDate = :dD, done = :d',
+      UpdateExpression: 'set description = :d, dueDate = :dD, done = :done',
       ConditionExpression: 'userId = :uId',
       ExpressionAttributeValues: {
         ':d':updatedTopic.description,
         ':dD':updatedTopic.dueDate,
+        ':done':updatedTopic.done,
         ':uId':userId
       },
       ReturnValues: "ALL_NEW"
