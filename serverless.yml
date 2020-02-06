@@ -31,6 +31,9 @@ provider:
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-northeast-1'}
+  tracing:
+    lambda: true
+    apiGateway: true
   apiGateway:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
   environment:
@@ -43,9 +46,11 @@ provider:
 functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
+    tracing: PassThrough
 
   GetTopics:
     handler: src/lambda/http/getTopics.handler
+    tracing: PassThrough
     events:
       - http:
           method: get
@@ -64,6 +69,7 @@ functions:
 
   CreateTopic:
     handler: src/lambda/http/createTopic.handler
+    tracing: PassThrough
     events:
       - http:
           method: post
@@ -88,6 +94,7 @@ functions:
 
   DeleteTopic:
     handler: src/lambda/http/deleteTopic.handler
+    tracing: PassThrough
     events:
       - http:
           method: delete
@@ -106,6 +113,7 @@ functions:
 
   UpdateTopic:
     handler: src/lambda/http/updateTopic.handler
+    tracing: PassThrough
     events:
       - http:
           method: patch
@@ -130,6 +138,7 @@ functions:
 
   UploadFile:
     handler: src/lambda/http/uploadFile.handler
+    tracing: PassThrough
     events:
       - http:
           method: post
