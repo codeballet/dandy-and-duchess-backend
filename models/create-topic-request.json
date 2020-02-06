@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "title": "topic",
+  "type": "object",
+  "properties": {
+    "description": {
+      "type": "string"
+    },
+    "dueDate": {
+      "type": "string"
+    }
+  },
+  "required": [
+      "description",
+      "dueDate"
+  ],
+  "additionalProperties": false
+}

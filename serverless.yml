@@ -5,6 +5,19 @@ service:
 #org: your-org-name
 
 custom:
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: DandyAndDuchess API
+        description: Serverless application for Dancy and Duchess app
+    models:
+      - name: CreateTopicRequest
+        contentType: application/json
+        schema: ${file(models/create-topic-request.json)}
+      - name: UpdateTopicRequest
+        contentType: application/json
+        schema: ${file(models/update-topic-request.json)}
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: true
@@ -17,7 +30,7 @@ provider:
   name: aws
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
-  region: ${opt:region, 'ap-east-1'}
+  region: ${opt:region, 'ap-northeast-1'}
   apiGateway:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
   environment:
@@ -57,6 +70,12 @@ functions:
           path: topics
           cors: true
           authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Create a new topic
+            description: Create a new topic
+            requestModels:
+              'application/json': CreateTopicRequest
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -93,6 +112,12 @@ functions:
           path: topics/{topicId}
           cors: true
           authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Update a topic
+            description: Update a topic
+            requestModels:
+              'application/json': UpdateTopicRequest
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -138,6 +163,15 @@ resources:
         ResponseType: DEFAULT_4XX
         RestApiId:
           Ref: ApiGatewayRestApi
+
+    RequestBodyValidator:
+      Type: AWS::ApiGateway::RequestValidator
+      Properties:
+        Name: 'request-body-validator'
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        ValidateRequestBody: true
+        ValidateRequestParameters: false
 
     TopicsDynamoDBTable:
       Type: "AWS::DynamoDB::Table"
